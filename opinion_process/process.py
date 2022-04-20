@@ -464,11 +464,12 @@ def processClassifyOpinionEx():
         #1- Split in sentences
 
 from itertools import starmap
-def insertInformationInDataBase(element):
+def insertInformationInDataBase(isentence,idOpinion, idCampaign, language):
 
     #Insert sentences in data base
-
-    isentence, idOpinion, idCampaign, language = element
+    id_opinion  = session['idOpinion'];
+    id_campaing = session['idOpinion'];
+    #isentence, idOpinion, idCampaign, language = element
     app = current_app._get_current_object()
     result = mongodb.insert_sentences(isentence.text, id_opinion, id_campaing, isentence.start, isentence.end, language)
 

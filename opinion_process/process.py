@@ -464,35 +464,45 @@ def processClassifyOpinionEx():
         #1- Split in sentences
 
 from itertools import starmap
-def insertInformationInDataBase(isentence,idOpinion, idCampaign, language):
+def getClasificationValue(polarity):
+    classification_value = 0;
+    classification_value = polarity.cpu().detach().numpy()
+    if len(classification_value) <= 0 or classification_value == None:
+      classification_value = 0
+    else:
+      classification_value = classification_value[0].item()
+    return classification_value
+
+def insertInformationInDataBase(isentence):
 
     #Insert sentences in data base
     id_opinion  = session['idOpinion'];
-    id_campaing = session['idOpinion'];
+    id_campaing = session['idCampaign'];
+    language = session['language'];
     #isentence, idOpinion, idCampaign, language = element
     app = current_app._get_current_object()
-    result = mongodb.insert_sentences(isentence.text, id_opinion, id_campaing, isentence.start, isentence.end, language)
+    result = mongodb.insert_sentences(isentence['text'], id_opinion, id_campaing, isentence['start'], isentence['end'], language)
 
     if result != None:
         print("****** Id ******** ", result.inserted_id)
         sentenceid = result.inserted_id
 
         # Insert entity in database
-        for ent in isentence.entities:
+        for ent in isentence['entities']:
             resultEntity = mongodb.insert_opinion_entity(ent.text, ent.label,sentenceid, id_opinion, ent.start_char,
-                                                 ent.ent_char, language)
+                                                 ent.end_char, language)
 
         # Insert asociated aspect
-        for aspect in isentence.aspects:
-            polarity = getABSAModelClassify(isentence.text, aspect.ext, app.tokenizer, app.appr, app.opt)
+        for aspect in isentence['aspects']:
+            polarity = getABSAModelClassify(isentence['text'], aspect.text, app.tokenizer, app.appr, app.opt)
 
-            resultAspect = mongodb.insert_opinion_aspect(aspect.text, polarity, sentenceid, id_opinion, aspect.start_char,
-                                             aspect.ent_char, language)
+            resultAspect = mongodb.insert_opinion_aspect(aspect.text, getClasificationValue(polarity), sentenceid, id_opinion, aspect.start_char,
+                                             aspect.end_char, language)
 
-        for aspect in isentence.aspects_noun:
-            polarity = getABSAModelClassify(isentence.text, aspect.ext, app.tokenizer, app.appr, app.opt)
-            resultAspect = mongodb.insert_opinion_aspect(aspect.text,polarity, sentenceid, id_opinion, aspect.start_char,
-                                                 aspect.ent_char, language)
+        for aspect in isentence['aspects_noun']:
+            polarity = getABSAModelClassify(isentence['text'], aspect.text, app.tokenizer, app.appr, app.opt)
+            resultAspect = mongodb.insert_opinion_aspect(aspect.text,getClasificationValue(polarity), sentenceid, id_opinion, aspect.start_char,
+                                                 aspect.end_char, language)
 
     #For each aspect classify with NLP computational model
     #and insert in databse
@@ -567,19 +577,23 @@ def processClassifyOpinionNLPEx():
                     # https://stackoverflow.com/questions/29283267/python-json-complex-objects-accounting-for-subclassing
                     #
                     if sentencesList != None:
-                        val = list(starmap( insertInformationInDataBase, zip( sentencesList, idOpinion, idCampaign, language) ))
-                    polarity = getABSAModelClassify(textOpinion, acpectOpinion, app.tokenizer, app.appr, app.opt)
+                        session['idOpinion'] = idOpinion
+                        session['idCampaign'] = idCampaign
+                        session['language'] = language
+                        val = list(map( insertInformationInDataBase,sentencesList ))
+                    #polarity = getABSAModelClassify(textOpinion, acpectOpinion, app.tokenizer, app.appr, app.opt)
                     classification_value = 0;
-                    if polarity != None:
+                    # if polarity != None:
+                    #
+                    #     classification_value = polarity.cpu().detach().numpy()
+                    #     if len(classification_value) <= 0 or classification_value == None:
+                    #         classification_value = 0
+                    #     else:
+                    #         classification_value = classification_value[0].item()
+                    #     sentences.append(
+                    #         {'sentence_text': textOpinion, 'aspect_text': acpectOpinion, 'aspect_type': 'ASPECT',
+                    #          'polarity': classification_value})
 
-                        classification_value = polarity.cpu().detach().numpy()
-                        if len(classification_value) <= 0 or classification_value == None:
-                            classification_value = 0
-                        else:
-                            classification_value = classification_value[0].item()
-                        sentences.append(
-                            {'sentence_text': textOpinion, 'aspect_text': acpectOpinion, 'aspect_type': 'ASPECT',
-                             'polarity': classification_value})
                     if len (sentences) <= 0:
                         return jsonify(
                             id_opinion=idOpinion,
@@ -592,7 +606,7 @@ def processClassifyOpinionNLPEx():
                             id_campaign = idCampaign,
                             language = language,
                             opinion_class=classification_value,
-                            opinion_sentence =sentences[0]
+                            opinion_sentence = len(sentencesList)
                           )
         except Exception as e:
             return jsonify(

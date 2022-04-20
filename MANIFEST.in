@@ -1,0 +1,4 @@
+include flaskrapp/opinion_process/mongoschema.sql
+graft flaskrapp/static
+graft flaskrapp/templates
+global-exclude *.pyc

@@ -1,0 +1,33 @@
+from setuptools import find_packages, setup
+
+setup(
+    name='opinion_process',
+    version='1.0.0',
+    packages=find_packages(),
+    include_package_data=True,
+    zip_safe=False,
+    install_requires=[
+        'flask',
+        'json-config-parser',
+        'torch==1.9.0+cu111',
+        'tqdm',
+        'boto3',
+        'transformers',
+        'requests',
+        'regex',
+        'sentencepiece',
+        'sacremoses',
+        'imageio',
+        'neuralnet-pytorch',
+        'scikit-learn',
+        'psutil>=5.4.8'
+        'pytorch_transformers',
+        'spacy==2.3.0',
+        'spacy-langdetect==0.1.2',
+        'flask-cors==3.0.8',
+        'flask-restful==0.3.8'
+        'spacy',
+        'pytest',
+        'coverage'
+    ],
+)

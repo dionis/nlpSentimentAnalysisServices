@@ -62,7 +62,7 @@ def init_db():
                 fake = Faker()
                 if colname == 'users':
                  result = db[colname].insert_one({ 'name':fake.name(),'address':fake.address()})
-                elif colname == 'reviews':
+                elif colname == 'Opinion':
                   resultreview = db[colname].insert_one({ 'name':fake.name(),'addres':fake.address(), 'time':fake.date(),'polarity': polarities[randint(0, (len(polarities)-1))],'text':fake.text()})
         for idb in db.list_collection_names():
           print(idb)
@@ -79,10 +79,10 @@ def init_app(app):
 def insert_sentences(_sentence, _idopinion, _idcamapaing, _start, _end, _language = 'en'):
     db = get_db()
     if db != None and _sentence != '' and _sentence != None:
-        result = db["opinion_sencentes"].insert_one({'sentence': _sentence,
-                                                     'idpinion': _idopinion,
-                                                      'idcampaign':_idcamapaing,
-                                                      'language':_language,
+        result = db["Sentence_Opinion"].insert_one({'texto': _sentence,
+                                                     'opinion': _idopinion,
+                                                      'campaign':_idcamapaing,
+                                                      'idioma':_language,
                                                       'start':_start,
                                                        'end':_end})
         return result
@@ -96,12 +96,12 @@ def insert_sentences(_sentence, _idopinion, _idcamapaing, _start, _end, _languag
 def insert_opinion_aspect(_aspect, _polarity, _idsentence, _idopinion, _idcamapaing, _start, _end, _language = 'en'):
     db = get_db()
     if db != None and _aspect != '' and _aspect != None and _polarity != "":
-        result = db["opinion_aspects"].insert_one({'aspect': _aspect,
-                                                      'polarity':_polarity,
-                                                      'idpinion': _idopinion,
-                                                      'idcampaign':_idcamapaing,
-                                                      'idsentence':_idsentence,
-                                                      'language': _language,
+        result = db["Opinion_Aspect"].insert_one({'texto': _aspect,
+                                                      'polaridad':_polarity,
+                                                      'opinion': _idopinion,
+                                                      'campaign':_idcamapaing,
+                                                      'sentence':_idsentence,
+                                                      'idioma': _language,
                                                       'start':_start,
                                                        'end':_end})
         return result
@@ -120,12 +120,12 @@ def insert_opinion_entity(_entity, _entity_type, _idsentence, _idopinion, _idcam
         ##  Warning maybe repetead entities in several sentences
         ##
 
-        result = db["sentence_entities"].insert_one({'entity': _entity,
-                                                      'entity_type':_entity_type,
-                                                      'idpinion': _idopinion,
-                                                      'idcampaign':_idcamapaing,
-                                                      'idsentence':_idsentence,
-                                                      'language': _language,
+        result = db["Entidad_Opinion"].insert_one({'texto': _entity,
+                                                      'label':_entity_type,
+                                                      'opinion': _idopinion,
+                                                      'campaign':_idcamapaing,
+                                                      'sentence':_idsentence,
+                                                      'idioma': _language,
                                                       'start':_start,
                                                        'end':_end})
         return result

@@ -53,7 +53,7 @@ def app():
         'TESTING': True,
         'DATABASE': db_path,
         'DATABASE_ADDRESS':'localhost',
-        'DATABASE_NAME':'opinion_process',
+        'DATABASE_NAME':'wisepocketDB',
         'DATABASE_PORT':'27017',
          'DATABASE_TYPE':'MONGO'
     })

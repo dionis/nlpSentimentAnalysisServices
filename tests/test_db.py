@@ -37,7 +37,7 @@ def test_insert_sentence_in_DB(app):
         if result == None:
             raise  Exception(" Bad insert opinion")
         else:
-           mycol = db["opinion_sencentes"]
+           mycol = db["Sentence_Opinion"]
            print("****** Id ******** ", result.inserted_id)
 
            myquery = {'_id': ObjectId(result.inserted_id)}
@@ -61,7 +61,7 @@ def test_insert_sentence_in_DB(app):
                # for i in mydoc:
                #     print(i)
                print(mydoc)
-               assert sentence == mydoc['sentence']
+               assert sentence == mydoc['texto']
 
         #Inser
 
@@ -103,7 +103,7 @@ def test_insert_aspect_in_DB(app):
         if result == None:
             raise  Exception(" Bad insert opinion")
         else:
-           mycol = db["opinion_aspects"]
+           mycol = db["Opinion_Aspect"]
            print("****** Id ******** ", result.inserted_id)
 
            myquery = {'_id': ObjectId(result.inserted_id)}
@@ -129,7 +129,7 @@ def test_insert_aspect_in_DB(app):
                # for i in mydoc:
                #     print(i)
                print(mydoc)
-               assert sentence == mydoc['aspect']
+               assert sentence == mydoc['texto']
 
 def test_insert_entity_in_DB(app):
     with app.app_context():
@@ -152,7 +152,7 @@ def test_insert_entity_in_DB(app):
         if result == None:
             raise  Exception(" Bad insert opinion aspect")
         else:
-           mycol = db["sentence_entities"]
+           mycol = db["Entidad_Opinion"]
            print("****** Id ******** ", result.inserted_id)
 
            myquery = {'_id': ObjectId(result.inserted_id)}
@@ -176,4 +176,4 @@ def test_insert_entity_in_DB(app):
                # for i in mydoc:
                #     print(i)
                print(mydoc)
-               assert sentence == mydoc['entity']
+               assert sentence == mydoc['texto']

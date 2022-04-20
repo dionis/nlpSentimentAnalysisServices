@@ -1,5 +1,5 @@
 users
-reviews
-opinion_aspects
-opinion_sencentes
-sentence_entities
+Opinion
+Opinion_Aspect
+Sentence_Opinion
+Entidad_Opinion

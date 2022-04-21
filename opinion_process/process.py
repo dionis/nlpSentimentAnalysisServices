@@ -496,8 +496,8 @@ def insertInformationInDataBase(isentence):
         for aspect in isentence['aspects']:
             polarity = getABSAModelClassify(isentence['text'], aspect.text, app.tokenizer, app.appr, app.opt)
 
-            resultAspect = mongodb.insert_opinion_aspect(aspect.text, getClasificationValue(polarity), sentenceid, id_opinion, aspect.start_char,
-                                             aspect.end_char, language)
+            resultAspect = mongodb.insert_opinion_aspect(aspect.text, getClasificationValue(polarity), sentenceid, id_opinion, aspect.idx,
+                                             aspect.idx + len(aspect.text), language)
 
         for aspect in isentence['aspects_noun']:
             polarity = getABSAModelClassify(isentence['text'], aspect.text, app.tokenizer, app.appr, app.opt)

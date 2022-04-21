@@ -748,7 +748,10 @@ class LinguisticRuleSpaCy:
              if (doc._.language['language'] != 'en'):
                  doc = self.nlpEs(_text)
                  if (doc._.language['language'] != 'es'):
-                     raise Exception("Unknow document language")
+                     print(" Error Language is by:")
+                     #print(_text)
+                     #raise Exception("Unknow document language")
+                     resultObject.language = 'unknow'
                  else:
                      resultObject.language = 'es'
              else:
@@ -788,7 +791,7 @@ class LinguisticRuleSpaCy:
              for token in interesToken:
                  print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
                        token.shape_, token.is_alpha, token.is_stop)
-                 sentencePos = hash_EntiyInFunction(mapForSentence, token.start_char, token.end_char)
+                 sentencePos = hash_EntiyInFunction(mapForSentence, token.idx, token.idx + len(token.text))
                  resultObject.sentences[sentencePos]['aspects'].append(token)
                  resultObject.aspects.append(token)
 

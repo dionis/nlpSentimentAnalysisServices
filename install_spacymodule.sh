@@ -25,8 +25,8 @@ cd spacy_module
 python3 -m spacy download en_core_web_md
 python3 -m spacy download es_core_news_sm
 
-#
-#python -m venv .env
+#https://spacy.io/usage
+#python3 -m venv .env
 #source .env/bin/activate
 #pip install -U pip setuptools wheel
 #pip install -U spacy
